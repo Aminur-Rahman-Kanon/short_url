@@ -2,6 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 require('dotenv').config();
+const https = require('https');
+
+const cronJob = () => {
+    setInterval(() => {
+        https.get('https://box-fp2o.onrender.com', (resp) => console.log('success'));
+    }, 840000)
+}
 
 app.get('/:item', async (req, res) => {
     const { item } = req.params;
@@ -28,4 +35,5 @@ app.listen(port, (err) => {
         throw Error(err);
     }
     console.log(`server is active on port ${port}`);  
+    cronJob();
 })
