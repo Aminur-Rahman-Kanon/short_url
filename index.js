@@ -3,8 +3,12 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 
-app.get('/', (req, res) => {
-    res.send('hello world')
+app.get('/:item', async (req, res) => {
+    const { item } = req.params;
+    await fetch('https://boxdelabonita.com/api/fetch-all-products')
+    .then(jsn => jsn.json())
+    .then(result => console.log(result, item))
+    .catch(err => console.log(err))
 })
 
 const port = process.env.PORT || '5000'
