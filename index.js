@@ -12,15 +12,17 @@ const cronJob = () => {
 
 app.get('/:item', async (req, res) => {
     const { item } = req.params;
+    const title = item.split('-').join(' ');
+    
     if (!item) return res.status(400).json({ message:'invalid request' });
     await fetch('https://boxdelabonita.com/api/fetch-all-products')
     .then(jsn => jsn.json())
     .then(result => {
         if (!result.data) return res.status(500).json({ message: 'server error' });
-        const filteredItem = result.data.filter(itm => itm.title === item);
+        const filteredItem = result.data.filter(itm => itm.title === title);
         if (filteredItem.length){
             const desgItem = filteredItem[0];
-            return res.redirect(`https://boxdelabonita.com/bag/${desgItem.category}/${item}`);
+            return res.redirect(`https://boxdelabonita.com/bag/${desgItem.category}/${title}`);
         }
         else {
             return res.status(404).json({ message: 'item not found' });
