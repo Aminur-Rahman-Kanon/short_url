@@ -10,12 +10,16 @@ app.get('/:item', async (req, res) => {
     .then(jsn => jsn.json())
     .then(result => {
         if (!result.data) return res.status(500).json({ message: 'server error' });
-        const filteredItem = result.data.filter(itm => itm.title === item)[0];
-        if (filteredItem){
-            return res.redirect(`https://boxdelabonita.com/bag/${filteredItem.category}/${item}`);
+        const filteredItem = result.data.filter(itm => itm.title === item);
+        if (filteredItem.length){
+            const desgItem = filteredItem[0];
+            return res.redirect(`https://boxdelabonita.com/bag/${desgItem.category}/${item}`);
+        }
+        else {
+            return res.status(404).json({ message: 'item not found' });
         }
     })
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(err => res.status(500).json({ message: `${err}` }));
 })
 
 const port = process.env.PORT || '5000'
